@@ -1,4 +1,5 @@
 import os
+import shutil
 
 def remove(path: str):
     """
