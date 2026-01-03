@@ -1,5 +1,6 @@
 import os
 import shutil
+from IPython.display import FileLink, display
 
 def remove(path: str):
     """
@@ -76,4 +77,46 @@ def rename(old_path: str, new_path: str):
     except Exception as e:
         print(f"Error renaming: {e}")
 
+def pytorch_model_downloader(
+    source_path: str,
+    dest_filename: str = "best.pt"
+):
+    """
+    Copies a model file (e.g. YOLO best.pt) from a source path to the Kaggle
+    working directory and provides a downloadable link.
 
+    Parameters
+    ----------
+    source_path : str
+        Full path to the source model file.
+        Example:
+        '/kaggle/working/results/models/weights/best.pt'
+
+    dest_filename : str, optional
+        Name of the copied file in '/kaggle/working'.
+        Default is 'best.pt'.
+
+    Returns
+    -------
+    str or None
+        Destination file path if copy is successful, otherwise None.
+
+    Example
+    -------
+    copy_model_to_working(
+        '/kaggle/working/results/models/weights/best.pt',
+        'best_model.pt'
+    )
+    """
+
+    dest_path = os.path.join("/kaggle/working", dest_filename)
+
+    if not os.path.exists(source_path):
+        print("Source model file not found. Please check the source path.")
+        return None
+
+    shutil.copy(source_path, dest_path)
+    print(f"Model file successfully copied to: {dest_path}")
+
+    display(FileLink(dest_path))
+    return dest_path
