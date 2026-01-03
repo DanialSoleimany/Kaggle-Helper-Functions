@@ -82,7 +82,7 @@ Conditions:
 
 ---
 
-## 3.4 `pytorch_model_downloader(source_path, dest_filename="best.pt")`
+### 3.4 `pytorch_model_downloader(source_path, dest_filename="best.pt")`
 
 This helper function is designed to **properly download PyTorch model files (e.g. `best.pt`) from Kaggle notebooks**.
 
@@ -91,7 +91,7 @@ This function solves that limitation by **copying a trained PyTorch model from a
 
 ---
 
-### Purpose
+#### Purpose
 
 * Copies a trained PyTorch model (`.pt`) to `/kaggle/working`
 * Ensures the file is downloadable from the Kaggle UI
@@ -100,7 +100,7 @@ This function solves that limitation by **copying a trained PyTorch model from a
 
 ---
 
-### Usage Example
+#### Usage Example
 
 ```python
 pytorch_model_downloader(
@@ -119,7 +119,7 @@ pytorch_model_downloader(
 
 ---
 
-### Important Kaggle Note
+#### Important Kaggle Note
 
 Kaggle **does not allow direct downloads** from arbitrary internal paths such as:
 
@@ -132,7 +132,7 @@ This function performs that copy automatically and exposes the file via a downlo
 
 ---
 
-### Cleanup After Download (Recommended)
+#### Cleanup After Download (Recommended)
 
 After successfully downloading the model, you may want to remove it from the working directory to keep the environment clean.
 
@@ -146,7 +146,7 @@ This will safely delete the copied model file **after** it has been downloaded.
 
 ---
 
-### Workflow
+#### Workflow
 
 1. Train the PyTorch / YOLO model
 2. Copy the model to `/kaggle/working` using `pytorch_model_downloader`
