@@ -1,67 +1,162 @@
-Kaggle Helper Functions
-A lightweight, dependency-free Python module with simple and safe utilities for file/folder management in Kaggle Notebooks.
-Perfect for organizing outputs, renaming folders, cleaning up, and — most importantly — easily downloading trained PyTorch models (like YOLO best.pt or last.pt).
+# Kaggle Helper Functions
 
-Quick Start
-1. Download the helper module
-Run this cell once in your Kaggle notebook:
-Pythonimport urllib.request
+A **lightweight, dependency-free Python utility module** designed specifically for **Kaggle Notebooks**.
+It provides safe and convenient helpers for file and folder management, with a strong focus on **making trained PyTorch models easily downloadable**.
+
+Ideal for:
+
+* Organizing experiment outputs
+* Renaming and versioning folders
+* Cleaning up temporary files
+* Downloading trained PyTorch models such as `best.pt` or `last.pt` (YOLO, etc.)
+
+---
+
+## Quick Start
+
+### 1. Download the helper module
+
+Run this cell **once** in your Kaggle notebook:
+
+```python
+import urllib.request
+
 url = "https://raw.githubusercontent.com/DanialSoleimany/Kaggle-Helper-Functions/main/helper.py"
 urllib.request.urlretrieve(url, "helper.py")
-2. Import it
-Pythonimport helper
-That's it — no extra packages needed!
+```
 
-Available Functions
-create_folder(path)
-Safely creates a folder. Can be called multiple times without errors.
-Pythonhelper.create_folder("/kaggle/working/my_outputs")
-remove(path)
-Deletes a file or an entire folder (recursively).
-Python# Delete a folder and everything inside
+---
+
+### 2. Import the module
+
+```python
+import helper
+```
+
+That’s it — no additional packages or installations required.
+
+---
+
+## Available Functions
+
+### `create_folder(path)`
+
+Safely creates a folder at the given path.
+
+```python
+helper.create_folder("/kaggle/working/my_outputs")
+```
+
+**Features:**
+
+* Can be called multiple times
+* No error if the folder already exists
+* Ideal for preparing output directories before training or inference
+
+---
+
+### `remove(path)`
+
+Deletes **either a file or a folder**, depending on the provided path.
+
+```python
+# Delete a folder and everything inside it
 helper.remove("/kaggle/working/old_experiment")
 
 # Delete a single file
 helper.remove("/kaggle/working/temp.yaml")
-⚠️ Caution: Folder deletion is permanent and recursive.
-rename(old_path, new_path)
-Renames or moves a file/folder. Fails if the destination already exists.
-Pythonhelper.rename("/kaggle/working/run1", "/kaggle/working/best_run")
-pytorch_model_downloader(source_path, dest_filename="best.pt")
-The most useful function for Kaggle users!
-Kaggle only allows downloads from /kaggle/working/. This function:
+```
 
-Copies your trained .pt model from any deep path to /kaggle/working/
-Generates a clickable download link right in the notebook
-Makes the file visible in the Output tab for manual download
+**Behavior:**
 
-Usage
-Python# Default name (best.pt)
-helper.pytorch_model_downloader("/kaggle/working/yolo/runs/train/exp/weights/best.pt")
+* Files are deleted normally
+* Folders are deleted recursively (including all contents)
 
-# Custom name
+⚠️ **Warning:** Folder deletion is permanent.
+
+---
+
+### `rename(old_path, new_path)`
+
+Renames or moves a file or folder.
+
+```python
+helper.rename(
+    "/kaggle/working/run1",
+    "/kaggle/working/best_run"
+)
+```
+
+**Rules:**
+
+* `old_path` must exist
+* `new_path` must not already exist
+
+Useful for experiment versioning and result organization.
+
+---
+
+### `pytorch_model_downloader(source_path, dest_filename="best.pt")`
+
+⭐ **The most important function for Kaggle users**
+
+Kaggle only allows file downloads from the `/kaggle/working/` directory.
+This function solves that limitation by:
+
+* Copying a trained PyTorch `.pt` model from any deep internal path
+* Placing it directly inside `/kaggle/working/`
+* Generating a **clickable download link** inside the notebook
+* Making the file visible in the **Output** tab for manual download
+
+---
+
+#### Usage
+
+```python
+# Default output name (best.pt)
+helper.pytorch_model_downloader(
+    "/kaggle/working/yolo/runs/train/exp/weights/best.pt"
+)
+```
+
+With a custom filename:
+
+```python
 helper.pytorch_model_downloader(
     "/kaggle/working/yolo/runs/train/exp/weights/best.pt",
     dest_filename="my_yolo_v8_best.pt"
 )
-After running, you'll see a blue clickable link — just click to download!
-Recommended Cleanup (Save disk space)
-Once downloaded, remove the copied file:
-Pythonhelper.remove("/kaggle/working/my_yolo_v8_best.pt")
+```
 
-Full Example Workflow (YOLO / PyTorch Training)
-Pythonimport helper
+After execution, a blue clickable link will appear — simply click it to download the model.
 
-# 1. Create output folder
+---
+
+### Recommended Cleanup (Save Disk Space)
+
+Once the model has been downloaded, you can safely remove the copied file:
+
+```python
+helper.remove("/kaggle/working/my_yolo_v8_best.pt")
+```
+
+---
+
+## Full Example Workflow (YOLO / PyTorch Training)
+
+```python
+import helper
+
+# 1. Create an output folder
 helper.create_folder("/kaggle/working/models")
 
-# 2. (After training finishes) Download the best model
+# 2. Download the best model after training
 helper.pytorch_model_downloader(
     "/kaggle/working/yolo/runs/train/exp/weights/best.pt",
     "yolo_v8_final_best.pt"
 )
 
-# 3. (Optional) Also download last.pt
+# 3. (Optional) Download last.pt as well
 helper.pytorch_model_downloader(
     "/kaggle/working/yolo/runs/train/exp/weights/last.pt",
     "yolo_v8_final_last.pt"
@@ -70,14 +165,28 @@ helper.pytorch_model_downloader(
 # 4. Clean up copied files after download
 helper.remove("/kaggle/working/yolo_v8_final_best.pt")
 helper.remove("/kaggle/working/yolo_v8_final_last.pt")
+```
 
-Important Kaggle Tips
+---
 
-Only files in /kaggle/working/ are persistent and downloadable
-Session outputs are cleared when the notebook is closed or restarted
-Always enable Internet in notebook settings to download helper.py
-No external dependencies — uses only os and shutil
+## Important Kaggle Notes
 
+* Only files inside `/kaggle/working/` are downloadable
+* Session files are cleared when the notebook is restarted or closed
+* Internet access must be enabled to download `helper.py`
+* Uses only Python standard library modules (`os`, `shutil`)
 
-License
-Free to use and modify for Kaggle competitions, research, personal projects, or any other purpose. No attribution required.
+---
+
+## License
+
+Free to use and modify for:
+
+* Kaggle competitions
+* Research
+* Personal and commercial projects
+
+No attribution required.
+
+* Split this into **Quick Start / Advanced Usage**
+* Provide a minimal version for Kaggle notebooks only
