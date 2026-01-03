@@ -82,41 +82,34 @@ def pytorch_model_downloader(
     dest_filename: str = "best.pt"
 ):
     """
-    Copies a model file (e.g. YOLO best.pt) from a source path to the Kaggle
-    working directory and provides a downloadable link.
+    Copies a PyTorch model file to Kaggle working directory and
+    displays a clean download link showing only the model filename
+    (without /kaggle/working in the link path).
 
     Parameters
     ----------
     source_path : str
         Full path to the source model file.
-        Example:
-        '/kaggle/working/results/models/weights/best.pt'
 
     dest_filename : str, optional
-        Name of the copied file in '/kaggle/working'.
-        Default is 'best.pt'.
+        Output filename shown for download (e.g. best.pt, last.pt).
 
     Returns
     -------
     str or None
-        Destination file path if copy is successful, otherwise None.
-
-    Example
-    -------
-    copy_model_to_working(
-        '/kaggle/working/results/models/weights/best.pt',
-        'best_model.pt'
-    )
+        Absolute destination path if successful, otherwise None.
     """
-
-    dest_path = os.path.join("/kaggle/working", dest_filename)
 
     if not os.path.exists(source_path):
         print("Source model file not found. Please check the source path.")
         return None
 
-    shutil.copy(source_path, dest_path)
-    print(f"Model file successfully copied to: {dest_path}")
+    dest_path = os.path.join("/kaggle/working", dest_filename)
 
-    display(FileLink(dest_path))
+    shutil.copy(source_path, dest_path)
+    print(f"Model file copied successfully: {dest_filename}")
+
+    # IMPORTANT: show link using filename only
+    display(FileLink(dest_filename))
+
     return dest_path
