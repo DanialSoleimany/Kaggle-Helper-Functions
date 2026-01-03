@@ -104,7 +104,7 @@ This function solves that limitation by **copying a trained PyTorch model from a
 
 ```python
 pytorch_model_downloader(
-    "/kaggle/working/results/model_v42/weights/best.pt"
+    "/kaggle/working/results/models/weights/best.pt"
 )
 ```
 
@@ -112,8 +112,8 @@ With a custom output name:
 
 ```python
 pytorch_model_downloader(
-    "/kaggle/working/results/model_v42/weights/best.pt",
-    "yolo_best_v42.pt"
+    "/kaggle/working/results/models/weights/best.pt",
+    "best.pt"
 )
 ```
 
