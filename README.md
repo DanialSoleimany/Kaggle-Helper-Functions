@@ -124,7 +124,7 @@ pytorch_model_downloader(
 Kaggle **does not allow direct downloads** from arbitrary internal paths such as:
 
 ```
-/kaggle/working/results/model_v42/weights/
+/kaggle/working/results/models/weights/
 ```
 
 To make a PyTorch model downloadable, it **must first be copied or moved to `/kaggle/working`**.
