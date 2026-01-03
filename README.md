@@ -82,6 +82,79 @@ Conditions:
 
 ---
 
+## 3.4 `pytorch_model_downloader(source_path, dest_filename="best.pt")`
+
+This helper function is designed to **properly download PyTorch model files (e.g. `best.pt`) from Kaggle notebooks**.
+
+In Kaggle, files are **only downloadable if they are located inside `/kaggle/working`**.
+This function solves that limitation by **copying a trained PyTorch model from any internal path (such as training outputs) into `/kaggle/working`**, and then generating a direct download link.
+
+---
+
+### Purpose
+
+* Copies a trained PyTorch model (`.pt`) to `/kaggle/working`
+* Ensures the file is downloadable from the Kaggle UI
+* Generates a clickable download link
+* Designed for YOLO and other PyTorch-based workflows
+
+---
+
+### Usage Example
+
+```python
+pytorch_model_downloader(
+    "/kaggle/working/results/model_v42/weights/best.pt"
+)
+```
+
+With a custom output name:
+
+```python
+pytorch_model_downloader(
+    "/kaggle/working/results/model_v42/weights/best.pt",
+    "yolo_best_v42.pt"
+)
+```
+
+---
+
+### Important Kaggle Note
+
+Kaggle **does not allow direct downloads** from arbitrary internal paths such as:
+
+```
+/kaggle/working/results/model_v42/weights/
+```
+
+To make a PyTorch model downloadable, it **must first be copied or moved to `/kaggle/working`**.
+This function performs that copy automatically and exposes the file via a download link.
+
+---
+
+### Cleanup After Download (Recommended)
+
+After successfully downloading the model, you may want to remove it from the working directory to keep the environment clean.
+
+This can be done using the `remove` helper function:
+
+```python
+remove("/kaggle/working/best.pt")
+```
+
+This will safely delete the copied model file **after** it has been downloaded.
+
+---
+
+### Workflow
+
+1. Train the PyTorch / YOLO model
+2. Copy the model to `/kaggle/working` using `pytorch_model_downloader`
+3. Download the model from Kaggle
+4. Remove the file using `remove` to clean up
+
+---
+
 ## 4. Typical Kaggle Workflow Example
 
 ```python
