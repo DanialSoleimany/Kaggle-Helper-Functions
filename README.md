@@ -98,8 +98,6 @@ Useful for experiment versioning and result organization.
 
 ### `pytorch_model_downloader(source_path, dest_filename="best.pt")`
 
-⭐ **The most important function for Kaggle users**
-
 Kaggle only allows file downloads from the `/kaggle/working/` directory.
 This function solves that limitation by:
 
