@@ -1,3 +1,5 @@
+import os
+
 def remove(path: str):
     """
     This function deletes a file or folder specified by the given path.
