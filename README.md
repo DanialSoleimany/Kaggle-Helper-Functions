@@ -172,7 +172,7 @@ helper.remove("/kaggle/working/yolo_v8_final_last.pt")
 * Only files inside `/kaggle/working/` are downloadable
 * Session files are cleared when the notebook is restarted or closed
 * Internet access must be enabled to download `helper.py`
-* Uses only Python standard library modules (`os`, `shutil`)
+* Uses only Python standard library modules like (`os`, `shutil`)
 
 ---
 
