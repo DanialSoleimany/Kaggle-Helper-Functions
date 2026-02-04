@@ -113,3 +113,39 @@ def pytorch_model_downloader(
     display(FileLink(dest_filename))
 
     return dest_path
+
+def move(src_path: str, dest_dir: str):
+    """
+    This function moves a file or folder from the source path to a destination directory.
+    It automatically handles the creation of the destination folder if it does not exist
+    and ensures the original file/folder name is preserved in the new location.
+
+    Parameters:
+    src_path (str): The current path of the file or folder to move.
+    dest_dir (str): The path of the directory where the item should be moved to.
+
+    Example:
+    move('/kaggle/working/best.pt', '/kaggle/working/models/v1')  # To move a file
+    move('/kaggle/working/temp_data', '/kaggle/working/archive')  # To move a folder
+    """
+    try:
+        # Check if the source path exists
+        if not os.path.exists(src_path):
+            print(f"The source file or folder at {src_path} was not found.")
+            return
+
+        # Create the destination directory if it doesn't exist
+        if not os.path.exists(dest_dir):
+            os.makedirs(dest_dir, exist_ok=True)
+            print(f"Destination directory created at {dest_dir}.")
+
+        # Determine the final destination path including the original filename/foldername
+        base_name = os.path.basename(src_path)
+        final_destination = os.path.join(dest_dir, base_name)
+
+        # Move the file or folder
+        shutil.move(src_path, final_destination)
+        print(f"Successfully moved {base_name} to {dest_dir}.")
+
+    except Exception as e:
+        print(f"Error moving {src_path} to {dest_dir}: {e}")
